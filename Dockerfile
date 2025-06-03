@@ -22,7 +22,7 @@ COPY . .
 RUN go build -o gotosocial -v
 
 # Stage 3: Create executor container
-FROM --platform=${TARGETPLATFORM} alpine:3.21 AS executor
+FROM --platform=${TARGETPLATFORM} alpine:3.24 AS executor
 USER 1000:1000
 WORKDIR "/gotosocial/storage"
 WORKDIR "/gotosocial/.cache"
