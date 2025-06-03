@@ -10,7 +10,7 @@ RUN yarn --cwd ./web/source install && \
     rm -rf ./web/source
 
 # Stage 2: Build Go binary
-FROM --platform=${BUILDPLATFORM} golang:1.21 AS builder
+FROM --platform=${BUILDPLATFORM} golang:1.24 AS builder
 WORKDIR /app
 
 # 🔧 Added this line to skip Go proxy (avoids common cloud build failures)
@@ -22,7 +22,7 @@ COPY . .
 RUN go build -o gotosocial -v
 
 # Stage 3: Create executor container
-FROM --platform=${TARGETPLATFORM} alpine:3.24 AS executor
+FROM --platform=${TARGETPLATFORM} alpine:3.21 AS executor
 USER 1000:1000
 WORKDIR "/gotosocial/storage"
 WORKDIR "/gotosocial/.cache"
