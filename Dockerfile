@@ -12,6 +12,10 @@ RUN yarn --cwd ./web/source install && \
 # Stage 2: Build Go binary
 FROM --platform=${BUILDPLATFORM} golang:1.21 AS builder
 WORKDIR /app
+
+# 🔧 Added this line to skip Go proxy (avoids common cloud build failures)
+ENV GOPROXY=direct
+
 COPY go.mod go.sum ./
 RUN go mod download -x && go mod verify
 COPY . .
