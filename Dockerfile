@@ -13,9 +13,9 @@ RUN yarn --cwd ./web/source install && \
 FROM --platform=${BUILDPLATFORM} golang:1.21 AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod download -x && go mod verify
 COPY . .
-RUN go build -o gotosocial
+RUN go build -o gotosocial -v
 
 # Stage 3: Create executor container
 FROM --platform=${TARGETPLATFORM} alpine:3.21 AS executor
