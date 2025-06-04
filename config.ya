@@ -1,0 +1,18 @@
+instance:
+  name: "Konnekt"
+  host: "konnekt.onrender.com"
+  account-domain: "konnekt.onrender.com"
+  media-domain: "konnekt.onrender.com"
+
+web:
+  bind_address: "0.0.0.0:8080"
+
+db:
+  type: "sqlite"
+  sqlite_path: "./gotosocial.db"
+
+log:
+  level: "info"
+
+media:
+  attachment-path: "./media"
