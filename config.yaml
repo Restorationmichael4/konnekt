@@ -1,8 +1,8 @@
 instance:
   name: "Konnekt"
   host: "konnekt.onrender.com"
-  account-domain: "konnekt.onrender.com"
-  media-domain: "konnekt.onrender.com"
+  account-domain: "https://konnekt-h1t9.onrender.com"
+  media-domain: "https://konnekt-h1t9.onrender.com"
 
 web:
   bind_address: "0.0.0.0:8080"
