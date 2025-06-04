@@ -1,6 +1,6 @@
 instance:
   name: "Konnekt"
-  host: "konnekt.onrender.com"
+  host: "https://konnekt-h1t9.onrender.com"
   account-domain: "https://konnekt-h1t9.onrender.com"
   media-domain: "https://konnekt-h1t9.onrender.com"
 
