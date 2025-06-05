@@ -1,20 +1,207 @@
-instance:
-  name: "Konnekt"
-  host: "https://konnekt-h1t9.onrender.com"
-  account-domain: "https://konnekt-h1t9.onrender.com"
-  media-domain: "https://konnekt-h1t9.onrender.com"
+# GoToSocial Configuration for Konnekt
+# Copyright (C) GoToSocial Authors admin@gotosocial.org
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
-web:
-  bind_address: "0.0.0.0"
-  bind_address: "0.0.0.0"
-  port: 8080
+###########################
+##### GENERAL CONFIG ######
+###########################
 
-db:
-  type: "sqlite"
-  sqlite_path: "./gotosocial.db"
+log-level: "info"                # Default logging level for debugging
+log-db-queries: false            # Disable verbose DB query logs
+log-client-ip: true              # Include client IPs in logs for security
+log-timestamp-format: "02/01/2006 15:04:05.000"  # Standard timestamp format
+application-name: "Konnekt"      # Your app’s name, shown in UI
+landing-page-user: ""            # No user for landing page (default to instance info)
+host: "konnekt.onrender.com"     # Render subdomain (update to konnekt.tk after Freenom)
+account-domain: ""               # Use same as host (simpler for single-domain setup)
+protocol: "https"                # Render enforces HTTPS
+bind-address: "0.0.0.0"          # Bind to all interfaces (required for Render)
+port: 8080                       # Render’s default port
+trusted-proxies:                 # Default localhost proxies
+  - "127.0.0.1/32"
+  - "::1"
 
-log:
-  level: "info"
+############################
+##### DATABASE CONFIG ######
+############################
 
-media:
-  attachment-path: "./media"
+db-type: "postgres"              # Use Supabase PostgreSQL
+db-address: "<supabase-host>"    # e.g., db.xxxx.supabase.co
+db-port: 5432                    # Supabase default port
+db-user: "<supabase-user>"       # e.g., postgres
+db-password: "<supabase-password>"  # From Supabase dashboard
+db-database: "<supabase-db>"     # e.g., postgres
+db-tls-mode: "require"           # Enforce TLS for Supabase
+db-tls-ca-cert: ""               # No custom CA cert needed
+db-max-open-conns-multiplier: 8  # Default connection pool size
+db-postgres-connection-string: ""  # Not needed (using individual fields)
+
+cache:
+  memory-target: "100MiB"        # Default cache size
+
+######################
+##### WEB CONFIG #####
+######################
+
+web-template-base-dir: "./web/template/"  # Default template directory
+web-asset-base-dir: "./web/assets/"      # Default assets directory
+
+###########################
+##### INSTANCE CONFIG #####
+###########################
+
+instance-languages: ["en"]       # English as primary language
+instance-federation-mode: "blocklist"  # Open federation with blocks
+instance-federation-spam-filter: false  # Disable experimental spam filter
+instance-expose-peers: false     # Hide peered domains from public
+instance-expose-blocklist: false  # Hide blocked domains from public
+instance-expose-blocklist-web: false  # Hide blocked domains on web
+instance-expose-allowlist: false  # Hide allowed domains from public
+instance-expose-public-timeline: true  # Allow public timeline access
+instance-deliver-to-shared-inboxes: true  # Optimize federation delivery
+instance-inject-mastodon-version: true  # Improve compatibility with Mastodon clients
+instance-subscriptions-process-from: "23:00"  # Default subscription processing time
+instance-subscriptions-process-every: "24h"  # Daily subscription updates
+instance-stats-mode: "zero"      # Hide stats from crawlers for privacy
+instance-allow-backdating-statuses: true  # Allow backdating posts
+
+###########################
+##### ACCOUNTS CONFIG #####
+###########################
+
+accounts-registration-open: true  # Allow public sign-ups
+accounts-reason-required: false  # No reason needed for sign-ups
+accounts-registration-daily-limit: 50  # Allow more sign-ups for growth
+accounts-registration-backlog-limit: 100  # Larger pending queue
+accounts-allow-custom-css: false  # Disable custom CSS for safety
+accounts-custom-css-length: 10000  # Default (no effect)
+accounts-max-profile-fields: 4    # Match X’s profile simplicity
+
+########################
+##### MEDIA CONFIG #####
+########################
+
+media-local-max-size: 40MiB                  # Default for Mastodon compatibility
+media-image-max-size-hint: 5MiB             # Match X’s image scaling
+media-video-max-size-hint: 40MiB            # Match X’s video scaling
+media-remote-max-size: 40MiB                # Default for federation
+media-description-min-chars: 0              # No minimum description
+media-description-max-chars: 280            # Match X’s post length
+media-emoji-local-max-size: 50KiB             # Default for Mastodon
+media-emoji-remote-max-size: 100KiB           # Default for federation
+media-ffmpeg-multiplier: 2                   # Increase for media-heavy instance
+media-remote-cache-days: 7                  # Default cache duration
+media-cleanup-from: "00:00"                 # Midnight cleanup
+media-cleanup-every: "24h"                  # Daily cleanup
+
+##########################
+##### STORAGE CONFIG #####
+##########################
+
+storage-backend: "local"                    # Use local storage (Render free tier)
+storage-local-base-path: "/gotosocial/storage"  # Default path
+storage-s3-endpoint: ""                    # Not using S3
+storage-s3-proxy: false                    # Not needed
+storage-s3-redirect-url: ""                 # Not needed
+storage-s3-use-ssl: true                   # Default
+storage-s3-access-key: ""                  # Not needed
+storage-s3-secret-key: ""                  # Not needed
+storage-s3-bucket: ""                      # Not needed
+storage-s3-bucket-lookup: "auto"                  # Default
+
+###########################
+##### STATUSES CONFIG #####
+###########################
+
+statuses-max-chars: 280                    # Match X’s 280-character limit
+statuses-poll-max-options: 4               # Match X’s poll options
+statuses-poll-option-max-chars: 50         # Default for polls
+statuses-media-max-files: 4                # Match X’s 4 images per post
+
+##############################
+##### LETSENCRYPT CONFIG #####
+##############################
+
+letsencrypt-enabled: false                 # Render handles SSL
+letsencrypt-port: 80                       # Not used
+letsencrypt-cert-dir: "/gotosocial/storage/certs"  # Not used
+letsencrypt-email-address: ""              # Not needed
+
+##############################
+##### MANUAL TLS CONFIG  #####
+##############################
+
+tls-certificate-chain: ""                  # Not needed
+tls-certificate-key: ""                   # Not needed
+
+#######################
+##### OIDC CONFIG #####
+#######################
+
+oidc-enabled: false                        # No OIDC (use default login)
+oidc-idp-name: ""                         # Not needed
+oidc-skip-verification: false              # Not needed
+oidc-issuer: ""                           # Not needed
+oidc-client-id: ""                        # Not needed
+oidc-client-secret: ""                    # Not needed
+oidc-scopes:                              # Not needed
+  - "openid"
+  - "email"
+  - "profile"
+  - "groups"
+oidc-link-existing: false                  # Not needed
+oidc-allowed-groups: []                   # Not needed
+oidc-admin-groups: []                     # Not needed
+
+#######################
+##### SMTP CONFIG #####
+#######################
+
+smtp-host: ""                             # No SMTP (optional for now)
+smtp-port: 0                              # Not needed
+smtp-username: ""                         # Not needed
+smtp-password: ""                         # Not needed
+smtp-from: ""                             # Not needed
+smtp-disclose-recipients: false           # Not needed
+
+#########################
+##### SYSLOG CONFIG #####
+#########################
+
+syslog-enabled: false                     # No syslog needed
+syslog-protocol: "udp"                    # Not needed
+syslog-address: "localhost:514"           # Not needed
+
+##################################
+##### OBSERVABILITY SETTINGS #####
+##################################
+
+request-id-header: "X-Request-Id"         # Default
+tracing-enabled: false                    # No tracing needed
+metrics-enabled: false                    # No metrics needed
+
+################################
+##### HTTP CLIENT SETTINGS #####
+################################
+
+http-client:
+  timeout: "30s"                         # Default timeout
+  allow-ips: []                          # No custom IP allows
+  block-ips: []                          # No custom IP blocks
+  tls-insecure-skip-verify: false        # Secure connections only
+  insecure-outgoing: false               # Secure outgoing requests
+
+#############################
+##### ADVANCED SETTINGS #####
+#############################
+
+advanced-cookies-samesite: "lax"          # Default for compatibility
+advanced-rate-limit-requests: 300         # Default rate limit
+advanced-rate-limit-exceptions: []        # No exceptions
+advanced-throttling-multiplier: 8         # Default throttling
+advanced-throttling-retry-after: "30s"    # Default retry
+advanced-sender-multiplier: 2             # Default sender concurrency
+advanced-csp-extra-uris: []               # No extra CSP URIs
+advanced-header-filter-mode: ""           # No header filtering
+advanced-scraper-deterrence-enabled: false  # Disable scraper deterrence
+advanced-scraper-deterrence-difficulty: 100000  # Default (no effect)
