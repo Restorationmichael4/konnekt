@@ -5,7 +5,7 @@ instance:
   media-domain: "https://konnekt-h1t9.onrender.com"
 
 web:
-  bind_address: "0.0.0.0:8080"
+  bind_address: "0.0.0.0"
 
 db:
   type: "sqlite"
