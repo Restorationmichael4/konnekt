@@ -6,6 +6,8 @@ instance:
 
 web:
   bind_address: "0.0.0.0"
+  bind_address: "0.0.0.0"
+  port: 10000
 
 db:
   type: "sqlite"
