@@ -12,7 +12,7 @@ log-client-ip: true              # Include client IPs in logs for security
 log-timestamp-format: "02/01/2006 15:04:05.000"  # Standard timestamp format
 application-name: "Konnekt"      # Your app’s name, shown in UI
 landing-page-user: ""            # No user for landing page (default to instance info)
-host: "konnekt.onrender.com"     # Render subdomain (update to konnekt.tk after Freenom)
+host: "https://konnekt-h1t9.onrender.com"     # Render subdomain (update to konnekt.tk after Freenom)
 account-domain: ""               # Use same as host (simpler for single-domain setup)
 protocol: "https"                # Render enforces HTTPS
 bind-address: "0.0.0.0"          # Bind to all interfaces (required for Render)
