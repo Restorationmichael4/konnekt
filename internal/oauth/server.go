@@ -126,9 +126,9 @@ func New(
 				oauth2.ClientCredentials,
 			},
 			AllowedCodeChallengeMethods: []oauth2.CodeChallengeMethod{
-				oauth2.CodeChallengePlain,
 				oauth2.CodeChallengeS256,
 			},
+			DefaultCodeChallengeMethod: oauth2.CodeChallengeS256,
 		},
 		manager,
 	)
