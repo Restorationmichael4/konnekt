@@ -207,7 +207,7 @@ code.superseriousbusiness.org/go-png-image-structure/v2
 # code.superseriousbusiness.org/httpsig v1.4.0
 ## explicit; go 1.21
 code.superseriousbusiness.org/httpsig
-# code.superseriousbusiness.org/oauth2/v4 v4.9.0
+# code.superseriousbusiness.org/oauth2/v4 v4.5.4-0.20250606121655-9d54ef189d42
 ## explicit; go 1.23.0
 code.superseriousbusiness.org/oauth2/v4
 code.superseriousbusiness.org/oauth2/v4/errors
@@ -276,7 +276,7 @@ codeberg.org/gruf/go-sched
 # codeberg.org/gruf/go-split v1.2.0
 ## explicit; go 1.20
 codeberg.org/gruf/go-split
-# codeberg.org/gruf/go-storage v0.2.1
+# codeberg.org/gruf/go-storage v0.3.1
 ## explicit; go 1.23.0
 codeberg.org/gruf/go-storage
 codeberg.org/gruf/go-storage/disk
@@ -542,9 +542,6 @@ github.com/goccy/go-json/internal/encoder/vm_color_indent
 github.com/goccy/go-json/internal/encoder/vm_indent
 github.com/goccy/go-json/internal/errors
 github.com/goccy/go-json/internal/runtime
-# github.com/golang-jwt/jwt v3.2.2+incompatible
-## explicit
-github.com/golang-jwt/jwt
 # github.com/golang-jwt/jwt/v5 v5.2.2
 ## explicit; go 1.18
 github.com/golang-jwt/jwt/v5
@@ -713,7 +710,7 @@ github.com/modern-go/reflect2
 # github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 ## explicit
 github.com/munnerz/goautoneg
-# github.com/ncruces/go-sqlite3 v0.26.0
+# github.com/ncruces/go-sqlite3 v0.26.1
 ## explicit; go 1.23.0
 github.com/ncruces/go-sqlite3
 github.com/ncruces/go-sqlite3/driver
@@ -1134,7 +1131,7 @@ go.uber.org/multierr
 # golang.org/x/arch v0.16.0
 ## explicit; go 1.23.0
 golang.org/x/arch/x86/x86asm
-# golang.org/x/crypto v0.38.0
+# golang.org/x/crypto v0.39.0
 ## explicit; go 1.23.0
 golang.org/x/crypto/acme
 golang.org/x/crypto/acme/autocert
@@ -1164,7 +1161,7 @@ golang.org/x/image/riff
 golang.org/x/image/vp8
 golang.org/x/image/vp8l
 golang.org/x/image/webp
-# golang.org/x/mod v0.24.0
+# golang.org/x/mod v0.25.0
 ## explicit; go 1.23.0
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
@@ -1192,7 +1189,7 @@ golang.org/x/net/trace
 ## explicit; go 1.23.0
 golang.org/x/oauth2
 golang.org/x/oauth2/internal
-# golang.org/x/sync v0.14.0
+# golang.org/x/sync v0.15.0
 ## explicit; go 1.23.0
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
@@ -1202,7 +1199,7 @@ golang.org/x/sys/cpu
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
-# golang.org/x/text v0.25.0
+# golang.org/x/text v0.26.0
 ## explicit; go 1.23.0
 golang.org/x/text/cases
 golang.org/x/text/encoding
@@ -1371,7 +1368,7 @@ gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
-# modernc.org/libc v1.65.7
+# modernc.org/libc v1.65.10
 ## explicit; go 1.23.0
 modernc.org/libc
 modernc.org/libc/errno
@@ -1405,7 +1402,7 @@ modernc.org/mathutil
 # modernc.org/memory v1.11.0
 ## explicit; go 1.23.0
 modernc.org/memory
-# modernc.org/sqlite v1.37.1 => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.37.1-concurrency-workaround
+# modernc.org/sqlite v1.37.1 => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.38.0-concurrency-workaround
 ## explicit; go 1.23.0
 modernc.org/sqlite
 modernc.org/sqlite/lib
@@ -1413,4 +1410,4 @@ modernc.org/sqlite/lib
 ## explicit; go 1.22.0
 mvdan.cc/xurls/v2
 # github.com/go-swagger/go-swagger => codeberg.org/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
-# modernc.org/sqlite => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.37.1-concurrency-workaround
+# modernc.org/sqlite => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.38.0-concurrency-workaround

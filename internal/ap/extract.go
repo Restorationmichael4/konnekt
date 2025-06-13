@@ -357,10 +357,14 @@ func ExtractIconURI(i WithIcon) (*url.URL, error) {
 			continue
 		}
 
-		imageURL, err := ExtractURL(image)
-		if err == nil && imageURL != nil {
-			return imageURL, nil
+		imageURL := GetURL(image)
+		if len(imageURL) == 0 {
+			// Nothing here.
+			continue
 		}
+
+		// Got a hit.
+		return imageURL[0], nil
 	}
 
 	return nil, gtserror.New("could not extract valid image URI from icon")
@@ -399,10 +403,14 @@ func ExtractImageURI(i WithImage) (*url.URL, error) {
 			continue
 		}
 
-		imageURL, err := ExtractURL(image)
-		if err == nil && imageURL != nil {
-			return imageURL, nil
+		imageURL := GetURL(image)
+		if len(imageURL) == 0 {
+			// Nothing here.
+			continue
 		}
+
+		// Got a hit.
+		return imageURL[0], nil
 	}
 
 	return nil, gtserror.New("could not extract valid image URI from image")
@@ -486,28 +494,6 @@ func ExtractFields(i WithAttachment) []*gtsmodel.Field {
 	}
 
 	return fields
-}
-
-// ExtractURL extracts the first URI it can find from the
-// given WithURL interface, or an error if no URL was set.
-// The ID of a type will not work, this function wants a URI
-// specifically.
-func ExtractURL(i WithURL) (*url.URL, error) {
-	urlProp := i.GetActivityStreamsUrl()
-	if urlProp == nil {
-		return nil, gtserror.New("url property was nil")
-	}
-
-	for iter := urlProp.Begin(); iter != urlProp.End(); iter = iter.Next() {
-		if !iter.IsIRI() {
-			continue
-		}
-
-		// Found it.
-		return iter.GetIRI(), nil
-	}
-
-	return nil, gtserror.New("no valid URL property found")
 }
 
 // ExtractPubKeyFromActor extracts the public key, public key ID, and public
@@ -676,15 +662,15 @@ func ExtractAttachments(i WithAttachment) ([]*gtsmodel.MediaAttachment, error) {
 // (just remote URL, description, and blurhash) from the given
 // Attachmentable interface, or an error if no remote URL is set.
 func ExtractAttachment(i Attachmentable) (*gtsmodel.MediaAttachment, error) {
-	// Get the URL for the attachment file.
+	// Get the first URL for the attachment file.
 	// If no URL is set, we can't do anything.
-	remoteURL, err := ExtractURL(i)
-	if err != nil {
-		return nil, gtserror.Newf("error extracting attachment URL: %w", err)
+	remoteURL := GetURL(i)
+	if len(remoteURL) == 0 {
+		return nil, gtserror.New("empty attachment URL")
 	}
 
 	return &gtsmodel.MediaAttachment{
-		RemoteURL:   remoteURL.String(),
+		RemoteURL:   remoteURL[0].String(),
 		Description: ExtractDescription(i),
 		Blurhash:    ExtractBlurhash(i),
 		FileMeta: gtsmodel.FileMeta{
@@ -1127,6 +1113,9 @@ func ExtractVisibility(addressable Addressable, actorFollowersURI string) (gtsmo
 // Will be nil (default policy) for Statusables that have no policy
 // set on them, or have a null policy. In such a case, the caller
 // should assume the default policy for the status's visibility level.
+//
+// Sub-policies of the returned policy, eg., CanLike, CanReply, may
+// each be nil if they were not set on the interaction policy.
 func ExtractInteractionPolicy(
 	statusable Statusable,
 	owner *gtsmodel.Account,
@@ -1153,6 +1142,8 @@ func ExtractInteractionPolicy(
 		return nil
 	}
 
+	// There's a policy key/value
+	// set, extract sub-policies.
 	return &gtsmodel.InteractionPolicy{
 		CanLike:     extractCanLike(policy.GetGoToSocialCanLike(), owner),
 		CanReply:    extractCanReply(policy.GetGoToSocialCanReply(), owner),
@@ -1160,67 +1151,82 @@ func ExtractInteractionPolicy(
 	}
 }
 
+// Returns either a parsed CanLike sub-policy, or nil
+// if canLike is not set, ie., if this post is from an
+// instance that doesn't know / care about canLike.
 func extractCanLike(
 	prop vocab.GoToSocialCanLikeProperty,
 	owner *gtsmodel.Account,
-) gtsmodel.PolicyRules {
+) *gtsmodel.PolicyRules {
 	if prop == nil || prop.Len() != 1 {
-		return gtsmodel.PolicyRules{}
+		return nil
 	}
 
 	propIter := prop.At(0)
 	if !propIter.IsGoToSocialCanLike() {
-		return gtsmodel.PolicyRules{}
-	}
-
-	return extractPolicyRules(propIter.Get(), owner)
-}
-
-func extractCanReply(
-	prop vocab.GoToSocialCanReplyProperty,
-	owner *gtsmodel.Account,
-) gtsmodel.PolicyRules {
-	if prop == nil || prop.Len() != 1 {
-		return gtsmodel.PolicyRules{}
-	}
-
-	propIter := prop.At(0)
-	if !propIter.IsGoToSocialCanReply() {
-		return gtsmodel.PolicyRules{}
-	}
-
-	return extractPolicyRules(propIter.Get(), owner)
-}
-
-func extractCanAnnounce(
-	prop vocab.GoToSocialCanAnnounceProperty,
-	owner *gtsmodel.Account,
-) gtsmodel.PolicyRules {
-	if prop == nil || prop.Len() != 1 {
-		return gtsmodel.PolicyRules{}
-	}
-
-	propIter := prop.At(0)
-	if !propIter.IsGoToSocialCanAnnounce() {
-		return gtsmodel.PolicyRules{}
+		return nil
 	}
 
 	withRules := propIter.Get()
 	if withRules == nil {
-		return gtsmodel.PolicyRules{}
+		return nil
 	}
 
-	return extractPolicyRules(propIter.Get(), owner)
+	return extractPolicyRules(withRules, owner)
+}
+
+// Returns either a parsed CanReply sub-policy, or nil
+// if canReply is not set, ie., if this post is from an
+// instance that doesn't know / care about canReply.
+func extractCanReply(
+	prop vocab.GoToSocialCanReplyProperty,
+	owner *gtsmodel.Account,
+) *gtsmodel.PolicyRules {
+	if prop == nil || prop.Len() != 1 {
+		return nil
+	}
+
+	propIter := prop.At(0)
+	if !propIter.IsGoToSocialCanReply() {
+		return nil
+	}
+
+	withRules := propIter.Get()
+	if withRules == nil {
+		return nil
+	}
+
+	return extractPolicyRules(withRules, owner)
+}
+
+// Returns either a parsed CanAnnounce sub-policy, or nil
+// if canAnnounce is not set, ie., if this post is from an
+// instance that doesn't know / care about canAnnounce.
+func extractCanAnnounce(
+	prop vocab.GoToSocialCanAnnounceProperty,
+	owner *gtsmodel.Account,
+) *gtsmodel.PolicyRules {
+	if prop == nil || prop.Len() != 1 {
+		return nil
+	}
+
+	propIter := prop.At(0)
+	if !propIter.IsGoToSocialCanAnnounce() {
+		return nil
+	}
+
+	withRules := propIter.Get()
+	if withRules == nil {
+		return nil
+	}
+
+	return extractPolicyRules(withRules, owner)
 }
 
 func extractPolicyRules(
 	withRules WithPolicyRules,
 	owner *gtsmodel.Account,
-) gtsmodel.PolicyRules {
-	if withRules == nil {
-		return gtsmodel.PolicyRules{}
-	}
-
+) *gtsmodel.PolicyRules {
 	// Check for `automaticApproval` and
 	// `manualApproval` properties first.
 	var (
@@ -1230,7 +1236,7 @@ func extractPolicyRules(
 	if (automaticApproval != nil && automaticApproval.Len() != 0) ||
 		(manualApproval != nil && manualApproval.Len() != 0) {
 		// At least one is set, use these props.
-		return gtsmodel.PolicyRules{
+		return &gtsmodel.PolicyRules{
 			AutomaticApproval: extractPolicyValues(automaticApproval, owner),
 			ManualApproval:    extractPolicyValues(manualApproval, owner),
 		}
@@ -1240,7 +1246,7 @@ func extractPolicyRules(
 	// and `withApproval` properties.
 	//
 	// TODO: Remove this in GtS v0.21.0.
-	return gtsmodel.PolicyRules{
+	return &gtsmodel.PolicyRules{
 		AutomaticApproval: extractPolicyValues(withRules.GetGoToSocialAlways(), owner),
 		ManualApproval:    extractPolicyValues(withRules.GetGoToSocialApprovalRequired(), owner),
 	}
